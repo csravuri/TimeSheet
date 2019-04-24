@@ -1,4 +1,6 @@
 # TimeSheet
 
 Release Notes:
-Soon
+Coming Soon
+
+Actual application will be avaliable in Release folder
