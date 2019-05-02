@@ -19,3 +19,14 @@ D:\Developement\Applications\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csproj.Gene
 D:\Developement\Applications\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csproj.CoreCompileInputs.cache
 D:\Developement\Applications\TimeSheet\TImeSheet\obj\Debug\TImeSheet.exe
 D:\Developement\Applications\TimeSheet\TImeSheet\obj\Debug\TImeSheet.pdb
+G:\Applications\cSharp\TimeSheet\TImeSheet\bin\Debug\TImeSheet.exe.config
+G:\Applications\cSharp\TimeSheet\TImeSheet\bin\Debug\TImeSheet.exe
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csproj.ResolveComReference.cache
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.Form1.resources
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.Properties.Resources.resources
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csproj.GenerateResource.cache
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csproj.CoreCompileInputs.cache
+G:\Applications\cSharp\TimeSheet\TImeSheet\bin\Debug\TImeSheet.pdb
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.exe
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.pdb
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csprojAssemblyReference.cache
