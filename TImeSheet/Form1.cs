@@ -276,7 +276,13 @@ namespace TImeSheet
             string taskName = this.taskNameComboBox.Text.Trim();
             if(taskName != "")
             {
+                string taskID = this.taskIDTextBox.Text;
                 this.taskIDTextBox.Text = allTasksList.Where(x => x.TaskName.Trim() == taskName).OrderByDescending(x => DateTime.Parse(x.TaskDate)).Select(x => x.TaskID).FirstOrDefault();
+                if(this.taskIDTextBox.Text.Trim() == "")
+                {
+                    this.taskIDTextBox.Text = taskID;
+                }
+
             }
         }
     }
