@@ -223,6 +223,8 @@ namespace TImeSheet
 
             if (validateExportDates(fromDate, toDate))
             {
+                this.exportButton.Enabled = false;
+                this.exportButton.Cursor = Cursors.WaitCursor;
                 ExcelWriter excelWriter = new ExcelWriter();
                 // pass date ranges to this, dont fetch and pass list
                 excelWriter.WriteExportDataToExcel(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));

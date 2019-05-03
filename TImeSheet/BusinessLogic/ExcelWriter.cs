@@ -83,7 +83,7 @@ namespace TImeSheet.BusinessLogic
             onlineWorkSheet.UsedRange.Cells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
 
-            excelWorkbook.SaveAs(GetFileExportPath() + "TimeSheet" + DateTime.Now.ToOADate().ToString().Replace(" ","_").Replace(":","") + ".xlsx");
+            excelWorkbook.SaveAs(GetFileExportPath() + "TimeSheet" + GetDateTimeForFileName() + ".xlsx");
             excelWorkbook.Close();
             xlApplication.Quit();
             
@@ -92,6 +92,10 @@ namespace TImeSheet.BusinessLogic
 
         }
 
+        private string GetDateTimeForFileName()
+        {
+            return DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
+        }
 
         private string GetFileExportPath()
         {

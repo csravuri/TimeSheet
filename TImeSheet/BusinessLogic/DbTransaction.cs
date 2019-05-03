@@ -233,7 +233,7 @@ namespace TImeSheet.BusinessLogic
             {
                 ClientName = y.Key.ClientName.ToString(),
                 TaskNames = string.Join(",", y.OrderBy(q => q.TaskDate).Select(t => t.TaskName)),
-                TaskDate = y.Key.Date.ToString("dd-MM-yyyy"),
+                TaskDate = y.Key.Date.ToString("yyyy-MM-dd"),
                 Duration = GetDuration(y.Sum(z => TimeSpan.Parse(z.TaskEndTime).TotalMinutes - TimeSpan.Parse(z.TaskStartTime).TotalMinutes))
             }
             ).ToList();
