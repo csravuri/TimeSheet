@@ -52,6 +52,7 @@
             // 
             // startButton
             // 
+            this.startButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.startButton.Location = new System.Drawing.Point(6, 127);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(75, 23);
@@ -62,6 +63,7 @@
             // 
             // endButton
             // 
+            this.endButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.endButton.Location = new System.Drawing.Point(95, 127);
             this.endButton.Name = "endButton";
             this.endButton.Size = new System.Drawing.Size(75, 23);
@@ -79,17 +81,19 @@
             this.taskNameComboBox.TabIndex = 2;
             this.taskNameComboBox.TextUpdate += new System.EventHandler(this.taskNameComboBox_TextUpdate);
             this.taskNameComboBox.Enter += new System.EventHandler(this.taskNameComboBox_Enter);
+            this.taskNameComboBox.Leave += new System.EventHandler(this.TaskNameComboBox_Leave);
             // 
             // taskIDTextBox
             // 
             this.taskIDTextBox.Location = new System.Drawing.Point(10, 30);
             this.taskIDTextBox.Name = "taskIDTextBox";
-            this.taskIDTextBox.Size = new System.Drawing.Size(45, 20);
+            this.taskIDTextBox.Size = new System.Drawing.Size(60, 20);
             this.taskIDTextBox.TabIndex = 0;
             // 
             // taskIDLabel
             // 
             this.taskIDLabel.AutoSize = true;
+            this.taskIDLabel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.taskIDLabel.Location = new System.Drawing.Point(10, 8);
             this.taskIDLabel.Name = "taskIDLabel";
             this.taskIDLabel.Size = new System.Drawing.Size(45, 13);
@@ -100,6 +104,7 @@
             // taskNameLabel
             // 
             this.taskNameLabel.AutoSize = true;
+            this.taskNameLabel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.taskNameLabel.Location = new System.Drawing.Point(76, 7);
             this.taskNameLabel.Name = "taskNameLabel";
             this.taskNameLabel.Size = new System.Drawing.Size(62, 13);
@@ -165,6 +170,7 @@
             // clientNameLabel
             // 
             this.clientNameLabel.AutoSize = true;
+            this.clientNameLabel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.clientNameLabel.Location = new System.Drawing.Point(193, 7);
             this.clientNameLabel.Name = "clientNameLabel";
             this.clientNameLabel.Size = new System.Drawing.Size(64, 13);
@@ -183,6 +189,7 @@
             // 
             // exportButton
             // 
+            this.exportButton.Cursor = System.Windows.Forms.Cursors.Hand;
             this.exportButton.Location = new System.Drawing.Point(342, 127);
             this.exportButton.Name = "exportButton";
             this.exportButton.Size = new System.Drawing.Size(75, 23);
@@ -220,12 +227,16 @@
             // 
             // toDateLabel
             // 
-            this.toDateLabel.AutoSize = true;
-            this.toDateLabel.Location = new System.Drawing.Point(234, 132);
+            this.toDateLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.toDateLabel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.toDateLabel.Location = new System.Drawing.Point(218, 132);
             this.toDateLabel.Name = "toDateLabel";
-            this.toDateLabel.Size = new System.Drawing.Size(20, 13);
+            this.toDateLabel.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.toDateLabel.Size = new System.Drawing.Size(37, 13);
             this.toDateLabel.TabIndex = 18;
-            this.toDateLabel.Text = "To";
+            this.toDateLabel.Text = "Today";
+            this.toDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toDateLabel.Click += new System.EventHandler(this.toDateLabel_Click);
             // 
             // Form1
@@ -233,7 +244,7 @@
             this.AcceptButton = this.startButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(429, 169);
+            this.ClientSize = new System.Drawing.Size(429, 168);
             this.Controls.Add(this.toDateLabel);
             this.Controls.Add(this.fromDateLabel);
             this.Controls.Add(this.toDateTimePicker);

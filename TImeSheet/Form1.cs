@@ -17,7 +17,8 @@ namespace TImeSheet
         {
             InitializeComponent();
         }
-        
+
+        private List<TimeSheetDetailsTable> allTasksList = new List<TimeSheetDetailsTable>();
         private void startButton_Click(object sender, EventArgs e)
         {
             if (ValidateDetails())
@@ -96,7 +97,8 @@ namespace TImeSheet
             RestorePreviousState();
 
             FillClientListDropDown();
-            FillTaskNameDropDown();            
+            FillTaskNameDropDown();
+            setDatePickerDefault();
         }
 
         private void FillClientListDropDown()
@@ -116,7 +118,7 @@ namespace TImeSheet
         private void FillTaskNameDropDown()
         {
             DbTransaction dbTransaction = new DbTransaction();
-            List<TimeSheetDetailsTable> allTasksList = dbTransaction.GetAllTasksForPeriod(DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"));
+            allTasksList = dbTransaction.GetAllTasksForPeriod(DateTime.Now.ToString("yyyy-MM-dd"), DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"));
 
             if(allTasksList.Count > 0)
             {
@@ -216,17 +218,64 @@ namespace TImeSheet
 
         private void exportButton_Click(object sender, EventArgs e)
         {
-            ExcelWriter excelWriter = new ExcelWriter();
-            // pass date ranges to this, dont fetch and pass list
-            excelWriter.WriteExportDataToExcel(DateTime.Now.Date.ToString("yyyy-MM-dd HH:mm:ss"), DateTime.Now.AddDays(1).Date.ToString("yyyy-MM-dd HH:mm:ss"));
+            DateTime fromDate = this.fromDateTimePicker.Value.Date;
+            DateTime toDate = this.toDateTimePicker.Value.Date.AddDays(1);
 
-            this.Close();
+            if (validateExportDates(fromDate, toDate))
+            {
+                ExcelWriter excelWriter = new ExcelWriter();
+                // pass date ranges to this, dont fetch and pass list
+                excelWriter.WriteExportDataToExcel(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
 
+                this.Close();
+            }
+            else
+            {
+                this.errorMessageLabel.ForeColor = Color.Red;
+                this.errorMessageLabel.Text = "From Date should be less than or equal to ToDate";
+                setDatePickerDefault();
+            }
         }
 
         private void toDateLabel_Click(object sender, EventArgs e)
         {
             // click on today 
+            enableDatePickers();
+        }
+
+        private void setDatePickerDefault()
+        {
+            this.toDateTimePicker.Value = DateTime.Now.Date;
+            this.fromDateTimePicker.Value = DateTime.Now.Date;
+            this.fromDateTimePicker.Enabled = false;
+            this.toDateTimePicker.Enabled = false;
+            this.fromDateLabel.Enabled = false;
+            this.toDateLabel.Text = "Today";
+
+        }
+
+        private void enableDatePickers()
+        {
+            this.toDateTimePicker.Value = DateTime.Now.Date;
+            this.fromDateTimePicker.Value = DateTime.Now.Date;
+            this.fromDateTimePicker.Enabled = true;
+            this.toDateTimePicker.Enabled = true;
+            this.fromDateLabel.Enabled = true;
+            this.toDateLabel.Text = "To";
+        }
+
+        private bool validateExportDates(DateTime fromDate, DateTime toDate)
+        {
+            return fromDate <= toDate;
+        }
+
+        private void TaskNameComboBox_Leave(object sender, EventArgs e)
+        {
+            string taskName = this.taskNameComboBox.Text.Trim();
+            if(taskName != "")
+            {
+                this.taskIDTextBox.Text = allTasksList.Where(x => x.TaskName.Trim() == taskName).OrderByDescending(x => DateTime.Parse(x.TaskDate)).Select(x => x.TaskID).FirstOrDefault();
+            }
         }
     }
 }
