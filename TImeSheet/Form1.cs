@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -19,6 +20,20 @@ namespace TImeSheet
         }
 
         private List<TimeSheetDetailsTable> allTasksList = new List<TimeSheetDetailsTable>();
+        
+
+        #region Click Events
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            this.endButton.Enabled = false;
+            RestorePreviousState();
+
+            FillClientListDropDown();
+            FillTaskNameDropDown();
+            setDatePickerDefault();
+        }
+
         private void startButton_Click(object sender, EventArgs e)
         {
             if (ValidateDetails())
@@ -77,6 +92,84 @@ namespace TImeSheet
 
         }
 
+        private void taskIDLabel_Click(object sender, EventArgs e)
+        {
+            this.taskIDTextBox.Enabled = true;
+        }
+
+        private void taskNameLabel_Click(object sender, EventArgs e)
+        {
+            this.taskNameComboBox.Enabled = true;
+        }
+
+        private void taskNameComboBox_TextUpdate(object sender, EventArgs e)
+        {
+            ClearErrorMessage();
+        }
+
+        private void clientNameLabel_Click(object sender, EventArgs e)
+        {
+            this.clientNameComboBox.Enabled = true;
+        }
+
+        private void clientNameComboBox_Enter(object sender, EventArgs e)
+        {
+            this.clientNameComboBox.DroppedDown = true;
+        }
+
+        private void taskNameComboBox_Enter(object sender, EventArgs e)
+        {
+            this.taskNameComboBox.DroppedDown = true;
+        }
+
+        private void exportButton_Click(object sender, EventArgs e)
+        {
+            DateTime fromDate = this.fromDateTimePicker.Value.Date;
+            DateTime toDate = this.toDateTimePicker.Value.Date.AddDays(1);
+
+            if (validateExportDates(fromDate, toDate))
+            {
+                this.exportButton.Enabled = false;
+                this.exportButton.Cursor = Cursors.WaitCursor;
+                ExcelWriter excelWriter = new ExcelWriter();
+                // pass date ranges to this, dont fetch and pass list
+                excelWriter.WriteExportDataToExcel(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
+
+                this.Close();
+            }
+            else
+            {
+                this.errorMessageLabel.ForeColor = Color.Red;
+                this.errorMessageLabel.Text = "From Date should be less than or equal to ToDate";
+                setDatePickerDefault();
+            }
+        }
+
+        private void toDateLabel_Click(object sender, EventArgs e)
+        {
+            // click on today 
+            enableDatePickers();
+        }
+
+        private void TaskNameComboBox_Leave(object sender, EventArgs e)
+        {
+            string taskName = this.taskNameComboBox.Text.Trim();
+            if (taskName != "")
+            {
+                string taskID = this.taskIDTextBox.Text;
+                this.taskIDTextBox.Text = allTasksList.Where(x => x.TaskName.Trim() == taskName).OrderByDescending(x => DateTime.Parse(x.TaskDate)).Select(x => x.TaskID).FirstOrDefault();
+                if (this.taskIDTextBox.Text.Trim() == "")
+                {
+                    this.taskIDTextBox.Text = taskID;
+                }
+
+            }
+        }
+
+        #endregion Click Events
+
+
+        #region Form updates
         private void ClearForNewTask()
         {
             this.taskIDTextBox.Text = "";
@@ -89,17 +182,7 @@ namespace TImeSheet
 
             this.ActiveControl = this.taskIDTextBox;
 
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            this.endButton.Enabled = false;
-            RestorePreviousState();
-
-            FillClientListDropDown();
-            FillTaskNameDropDown();
-            setDatePickerDefault();
-        }
+        }       
 
         private void FillClientListDropDown()
         {
@@ -109,7 +192,7 @@ namespace TImeSheet
             if(allClientList.Count > 0)
             {
                 this.clientNameComboBox.Items.Clear();
-                this.clientNameComboBox.Items.AddRange(allClientList.Select(x => x.ClientName).Distinct().ToArray());
+                this.clientNameComboBox.Items.AddRange(allClientList.Where(x => x.ClientName != "").Select(x => x.ClientName).Distinct().ToArray());
             }
 
 
@@ -123,11 +206,10 @@ namespace TImeSheet
             if(allTasksList.Count > 0)
             {
                 this.taskNameComboBox.Items.Clear();
-                this.taskNameComboBox.Items.AddRange(allTasksList.Select(x => x.TaskName).Distinct().ToArray());
+                this.taskNameComboBox.Items.AddRange(allTasksList.Where(x => x.TaskName != "").Select(x => x.TaskName).Distinct().ToArray());
             }
 
         }
-
 
         private void RestorePreviousState()
         {
@@ -181,69 +263,10 @@ namespace TImeSheet
             this.clientNameComboBox.Enabled = false;
         }
 
-        private void taskIDLabel_Click(object sender, EventArgs e)
-        {
-            this.taskIDTextBox.Enabled = true;
-        }
-
-        private void taskNameLabel_Click(object sender, EventArgs e)
-        {
-            this.taskNameComboBox.Enabled = true;
-        }
-
-        private void taskNameComboBox_TextUpdate(object sender, EventArgs e)
-        {
-            ClearErrorMessage();
-        }
-
         private void ClearErrorMessage()
         {
             this.errorMessageLabel.Text = "";
-        }
-
-        private void clientNameLabel_Click(object sender, EventArgs e)
-        {
-            this.clientNameComboBox.Enabled = true;
-        }
-
-        private void clientNameComboBox_Enter(object sender, EventArgs e)
-        {
-            this.clientNameComboBox.DroppedDown = true;
-        }
-
-        private void taskNameComboBox_Enter(object sender, EventArgs e)
-        {
-            this.taskNameComboBox.DroppedDown = true;
-        }
-
-        private void exportButton_Click(object sender, EventArgs e)
-        {
-            DateTime fromDate = this.fromDateTimePicker.Value.Date;
-            DateTime toDate = this.toDateTimePicker.Value.Date.AddDays(1);
-
-            if (validateExportDates(fromDate, toDate))
-            {
-                this.exportButton.Enabled = false;
-                this.exportButton.Cursor = Cursors.WaitCursor;
-                ExcelWriter excelWriter = new ExcelWriter();
-                // pass date ranges to this, dont fetch and pass list
-                excelWriter.WriteExportDataToExcel(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
-
-                this.Close();
-            }
-            else
-            {
-                this.errorMessageLabel.ForeColor = Color.Red;
-                this.errorMessageLabel.Text = "From Date should be less than or equal to ToDate";
-                setDatePickerDefault();
-            }
-        }
-
-        private void toDateLabel_Click(object sender, EventArgs e)
-        {
-            // click on today 
-            enableDatePickers();
-        }
+        }        
 
         private void setDatePickerDefault()
         {
@@ -258,32 +281,34 @@ namespace TImeSheet
 
         private void enableDatePickers()
         {
-            this.toDateTimePicker.Value = DateTime.Now.Date;
-            this.fromDateTimePicker.Value = DateTime.Now.Date;
+            this.toDateTimePicker.Value = DateTime.Now.Date; // set week start day
+            this.fromDateTimePicker.Value = GetWeekStartDayDate(DateTime.Now.Date);
             this.fromDateTimePicker.Enabled = true;
             this.toDateTimePicker.Enabled = true;
             this.fromDateLabel.Enabled = true;
             this.toDateLabel.Text = "To";
         }
 
+        private DateTime GetWeekStartDayDate(DateTime someDate)
+        {
+            string weekStartDay = GetWeekStartDay() ?? "Monday";
+            while(!someDate.DayOfWeek.ToString().ToLower().Equals(weekStartDay.ToLower()))
+            {
+                someDate = someDate.AddDays(-1);
+            }
+            return someDate;
+        }
+
+        private string GetWeekStartDay()
+        {
+            return ConfigurationManager.AppSettings["WeekStartDay"];
+        }
+
         private bool validateExportDates(DateTime fromDate, DateTime toDate)
         {
             return fromDate <= toDate;
         }
+        #endregion Form updates
 
-        private void TaskNameComboBox_Leave(object sender, EventArgs e)
-        {
-            string taskName = this.taskNameComboBox.Text.Trim();
-            if(taskName != "")
-            {
-                string taskID = this.taskIDTextBox.Text;
-                this.taskIDTextBox.Text = allTasksList.Where(x => x.TaskName.Trim() == taskName).OrderByDescending(x => DateTime.Parse(x.TaskDate)).Select(x => x.TaskID).FirstOrDefault();
-                if(this.taskIDTextBox.Text.Trim() == "")
-                {
-                    this.taskIDTextBox.Text = taskID;
-                }
-
-            }
-        }
     }
 }

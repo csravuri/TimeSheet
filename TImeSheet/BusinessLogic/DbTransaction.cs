@@ -202,17 +202,31 @@ namespace TImeSheet.BusinessLogic
             sqlConnection.Close();
         }
 
-        public void GetExportData(string fromDate, string toDate, out List<EmailTemplate> emailData, out List<SentrifugoTemplate> sentrifugoData)
+        public void GetExportData(string fromDate, string toDate, out List<EmailTemplate> emailData, out List<SentrifugoTemplate> sentrifugoData, out List<TimeSheetDetailsTable> allTaskDetailsData)
         {
             List<TimeSheetDetailsTable> taskDetailsList = GetAllTasksForPeriod(fromDate, toDate);
             emailData = GetEmailData(taskDetailsList);
             sentrifugoData = GetSentrifugoData(taskDetailsList);
-
+            allTaskDetailsData = GetAllTaskDetailsData(taskDetailsList);
         }
 
-        public List<EmailTemplate> GetEmailData(List<TimeSheetDetailsTable> taskDetailsList)
+        private List<TimeSheetDetailsTable> GetAllTaskDetailsData(List<TimeSheetDetailsTable> taskDetailsList)
         {
-            List<EmailTemplate> emailData = taskDetailsList.GroupBy(x => new { x.TaskName, x.ClientName, x.TaskID }).Select(x =>
+            foreach(TimeSheetDetailsTable item in taskDetailsList)
+            {
+                item.TaskDate = DateTime.Parse(item.TaskDate).ToString("yyyy-MM-dd");
+                item.TaskStartTime = DateTime.Parse(item.TaskStartTime).ToString("HH:mm:ss");
+                item.TaskEndTime = DateTime.Parse(item.TaskEndTime).ToString("HH:mm:ss");
+                item.IsCoded = bool.Parse(item.IsCoded) ? "Done" : "Pending";
+                item.IsReviewed = bool.Parse(item.IsReviewed) ? "Done" : "Pending";
+                item.IsCheckin = bool.Parse(item.IsCheckin) ? "Done" : "Pending";
+            }
+
+            return taskDetailsList;
+        }
+        private List<EmailTemplate> GetEmailData(List<TimeSheetDetailsTable> taskDetailsList)
+        {
+            List<EmailTemplate> emailData = taskDetailsList.GroupBy(x => new { x.TaskName, x.ClientName, x.TaskID, DateTime.Parse(x.TaskDate).Date }).Select(x =>
             new EmailTemplate
             {
                 TaskID = x.Key.TaskID.ToString(),

@@ -23,8 +23,9 @@ namespace TImeSheet.BusinessLogic
 
             List<EmailTemplate> emailData = new List<EmailTemplate>();
             List<SentrifugoTemplate> sentrifugoData = new List<SentrifugoTemplate>();
+            List<TimeSheetDetailsTable> allTimesheetData = new List<TimeSheetDetailsTable>();
 
-            dbTransaction.GetExportData(fromDate, toDate, out emailData, out sentrifugoData);
+            dbTransaction.GetExportData(fromDate, toDate, out emailData, out sentrifugoData, out allTimesheetData);
 
             var xlApplication = new Excel.Application();
             xlApplication.Workbooks.Add("");
@@ -35,13 +36,18 @@ namespace TImeSheet.BusinessLogic
             Excel._Worksheet emailWorkSheet = excelWorkbook.ActiveSheet;
             excelWorkbook.Sheets.Add(emailWorkSheet);
             Excel._Worksheet onlineWorkSheet = excelWorkbook.ActiveSheet;
+            excelWorkbook.Sheets.Add(onlineWorkSheet);
+            Excel._Worksheet allDetailsSheet = excelWorkbook.ActiveSheet;
 
             emailWorkSheet.Name = "Email";
             onlineWorkSheet.Name = "Sentrifugo";
+            allDetailsSheet.Name = "Detailed Tasks";
 
             // fill two sheets
 
             // fill email work sheet
+
+            #region Email sheet
             emailWorkSheet.Cells[1, 1] = "TaskID";
             emailWorkSheet.Cells[1, 2] = "Client Name";
             emailWorkSheet.Cells[1, 3] = "Task Name";
@@ -60,10 +66,11 @@ namespace TImeSheet.BusinessLogic
             emailWorkSheet.Columns.AutoFit();
             emailWorkSheet.Columns.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
             emailWorkSheet.UsedRange.Cells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-
+            #endregion Email sheet
 
             // fill sentrifugo work sheet
 
+            #region Online Sheet
             onlineWorkSheet.Cells[1, 1] = "ClientName";
             onlineWorkSheet.Cells[1, 2] = "Duration";
             onlineWorkSheet.Cells[1, 3] = "Task Names";
@@ -81,28 +88,70 @@ namespace TImeSheet.BusinessLogic
             onlineWorkSheet.Columns.AutoFit();
             onlineWorkSheet.Columns.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
             onlineWorkSheet.UsedRange.Cells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            #endregion Online Sheet
 
+            #region Detailed sheet
+            allDetailsSheet.Cells[1, 1] = "Task Date";
+            allDetailsSheet.Cells[1, 2] = "Task ID";
+            allDetailsSheet.Cells[1, 3] = "Task Name";
+            allDetailsSheet.Cells[1, 4] = "Client Name";
+            allDetailsSheet.Cells[1, 5] = "Task Start Time"; 
+            allDetailsSheet.Cells[1, 6] = "Task End Time";
+            allDetailsSheet.Cells[1, 7] = "Task Duration";
+            allDetailsSheet.Cells[1, 8] = "Coding state";
+            allDetailsSheet.Cells[1, 9] = "Review State";
+            allDetailsSheet.Cells[1, 10] = "Checkin State";
+            allDetailsSheet.Cells[1, 11] = "Remarks";
 
+            for(int i = 0; i < allTimesheetData.Count; i++)
+            {
+                allDetailsSheet.Cells[i + 2, 1] = allTimesheetData[i].TaskDate;
+                allDetailsSheet.Cells[i + 2, 2] = allTimesheetData[i].TaskID;
+                allDetailsSheet.Cells[i + 2, 3] = allTimesheetData[i].TaskName;
+                allDetailsSheet.Cells[i + 2, 4] = allTimesheetData[i].ClientName;
+                allDetailsSheet.Cells[i + 2, 5] = allTimesheetData[i].TaskStartTime;
+                allDetailsSheet.Cells[i + 2, 6] = allTimesheetData[i].TaskEndTime;
+                allDetailsSheet.Cells[i + 2, 7] = GetTimeDifference(allTimesheetData[i].TaskStartTime, allTimesheetData[i].TaskEndTime); 
+                allDetailsSheet.Cells[i + 2, 8] = allTimesheetData[i].IsCoded;
+                allDetailsSheet.Cells[i + 2, 9] = allTimesheetData[i].IsReviewed;
+                allDetailsSheet.Cells[i + 2, 10] = allTimesheetData[i].IsCheckin;
+                allDetailsSheet.Cells[i + 2, 11] = allTimesheetData[i].Comment;
+            }
+
+            allDetailsSheet.Columns.AutoFit();
+            allDetailsSheet.Columns.HorizontalAlignment = Excel.XlHAlign.xlHAlignLeft;
+            allDetailsSheet.UsedRange.Cells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            #endregion Detailed sheet
+
+            
             excelWorkbook.SaveAs(GetFileExportPath() + "TimeSheet" + GetDateTimeForFileName() + ".xlsx");
             excelWorkbook.Close();
             xlApplication.Quit();
-            
-            
-
 
         }
 
+        private string GetTimeDifference(string startTime, string endTime)
+        {
+            if(endTime == null || endTime == "")
+            {
+                endTime = DateTime.Now.ToString("HH:mm:ss");
+            }
+            TimeSpan startd = DateTime.Parse(startTime).TimeOfDay;
+            TimeSpan ended = DateTime.Parse(endTime).TimeOfDay;
+
+            return ended.Subtract(startd).ToString();
+
+        }
         private string GetDateTimeForFileName()
         {
-            return DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
+            return DateTime.Now.ToString("_yyyy_MM_dd-HH_mm_ss");
         }
 
         private string GetFileExportPath()
         {
             string exportPath = ConfigurationManager.AppSettings["ExportFolderPath"];
             return exportPath;
-        }
-
+        }        
 
     }
 }
