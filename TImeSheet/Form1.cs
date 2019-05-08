@@ -21,6 +21,17 @@ namespace TImeSheet
 
         private List<TimeSheetDetailsTable> allTasksList = new List<TimeSheetDetailsTable>();
         
+        private void setFormDefaultPosition()
+        {
+            int screenWidth = System.Windows.Forms.SystemInformation.PrimaryMonitorMaximizedWindowSize.Width;
+
+            int formWidth = this.Width;
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Left = screenWidth - formWidth;
+            this.Top = 0;
+
+        }
 
         #region Click Events
 
@@ -32,6 +43,7 @@ namespace TImeSheet
             FillClientListDropDown();
             FillTaskNameDropDown();
             setDatePickerDefault();
+            setFormDefaultPosition();
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -57,6 +69,7 @@ namespace TImeSheet
                 dbTransaction.AddNonExistingClient(clientName);
                 this.startButton.Enabled = false;
                 this.endButton.Enabled = true;
+                this.WindowState = FormWindowState.Minimized;
             }
             else
             {

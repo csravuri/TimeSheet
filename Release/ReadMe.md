@@ -25,3 +25,7 @@
 2. Export data in perticual date range by clicking on name 
 3. Hold Alt button in keyboard, it will underline letters on Buttons. press the underline letter in keyboard to do the same button click operation with mouse(ignore if it is new or not great)
 4. From date will be previous Monday, can be changed on .config file
+5. Previous unfinished task will be restored on restarting the application
+
+## Coming soon
+1. Opens the exported file once clicked on export
