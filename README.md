@@ -3,7 +3,7 @@
 Release Notes:
 Coming Soon
 
-Featues:
+### Featues:
 Added in Release folder
 
 Actual application will be avaliable in Release folder
