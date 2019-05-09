@@ -26,7 +26,8 @@
 3. Hold Alt button in keyboard, it will underline letters on Buttons. press the underline letter in keyboard to do the same button click operation with mouse(ignore if it is new or not great)
 4. From date will be previous Monday, can be changed on .config file
 5. Previous unfinished task will be restored on restarting the application
+6. Opens the exported file once clicked on export
+7. Current Task start time and duration on application
 
 ## Coming soon
-1. Opens the exported file once clicked on export
-2. Current Task start time and endtime, duration on application
+1. ....

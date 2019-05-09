@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace TImeSheet.BusinessLogic
         /// </summary>
         /// <param name="fromDate">yyyy-MM-dd HH:mm:ss</param>
         /// <param name="toDate">yyyy-MM-dd HH:mm:ss</param>
-        public void WriteExportDataToExcel(string fromDate, string toDate)
+        public string WriteExportDataToExcel(string fromDate, string toDate)
         {
             DbTransaction dbTransaction = new DbTransaction();
 
@@ -123,14 +124,15 @@ namespace TImeSheet.BusinessLogic
             allDetailsSheet.UsedRange.Cells.Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
             #endregion Detailed sheet
 
-            
-            excelWorkbook.SaveAs(GetFileExportPath() + "TimeSheet" + GetDateTimeForFileName() + ".xlsx");
+            string saveFile = GetFileExportPath() + "TimeSheet" + GetDateTimeForFileName() + ".xlsx";
+            excelWorkbook.SaveAs(saveFile);
             excelWorkbook.Close();
             xlApplication.Quit();
 
+            return saveFile;
         }
 
-        private string GetTimeDifference(string startTime, string endTime)
+        public string GetTimeDifference(string startTime, string endTime)
         {
             if(endTime == null || endTime == "")
             {
@@ -142,6 +144,12 @@ namespace TImeSheet.BusinessLogic
             return ended.Subtract(startd).ToString();
 
         }
+
+        public string GetStandardTimeFormat(string timeString)
+        {
+            return DateTime.Parse(timeString).ToString("HH:mm:ss");
+        }
+
         private string GetDateTimeForFileName()
         {
             return DateTime.Now.ToString("_yyyy_MM_dd-HH_mm_ss");

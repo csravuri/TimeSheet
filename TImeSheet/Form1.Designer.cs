@@ -48,6 +48,10 @@
             this.toDateTimePicker = new System.Windows.Forms.DateTimePicker();
             this.fromDateLabel = new System.Windows.Forms.Label();
             this.toDateLabel = new System.Windows.Forms.Label();
+            this.startTimeLable = new System.Windows.Forms.Label();
+            this.startTimeValue = new System.Windows.Forms.Label();
+            this.durationLabel = new System.Windows.Forms.Label();
+            this.durationValue = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // startButton
@@ -162,7 +166,7 @@
             // errorMessageLabel
             // 
             this.errorMessageLabel.AutoSize = true;
-            this.errorMessageLabel.Location = new System.Drawing.Point(13, 153);
+            this.errorMessageLabel.Location = new System.Drawing.Point(233, 154);
             this.errorMessageLabel.Name = "errorMessageLabel";
             this.errorMessageLabel.Size = new System.Drawing.Size(0, 13);
             this.errorMessageLabel.TabIndex = 12;
@@ -239,12 +243,51 @@
             this.toDateLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.toDateLabel.Click += new System.EventHandler(this.toDateLabel_Click);
             // 
+            // startTimeLable
+            // 
+            this.startTimeLable.AutoSize = true;
+            this.startTimeLable.Location = new System.Drawing.Point(6, 154);
+            this.startTimeLable.Name = "startTimeLable";
+            this.startTimeLable.Size = new System.Drawing.Size(58, 13);
+            this.startTimeLable.TabIndex = 19;
+            this.startTimeLable.Text = "Start Time:";
+            // 
+            // startTimeValue
+            // 
+            this.startTimeValue.AutoSize = true;
+            this.startTimeValue.Location = new System.Drawing.Point(61, 154);
+            this.startTimeValue.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.startTimeValue.Name = "startTimeValue";
+            this.startTimeValue.Size = new System.Drawing.Size(0, 13);
+            this.startTimeValue.TabIndex = 20;
+            // 
+            // durationLabel
+            // 
+            this.durationLabel.AutoSize = true;
+            this.durationLabel.Location = new System.Drawing.Point(123, 154);
+            this.durationLabel.Name = "durationLabel";
+            this.durationLabel.Size = new System.Drawing.Size(50, 13);
+            this.durationLabel.TabIndex = 21;
+            this.durationLabel.Text = "Duration:";
+            // 
+            // durationValue
+            // 
+            this.durationValue.AutoSize = true;
+            this.durationValue.Location = new System.Drawing.Point(171, 154);
+            this.durationValue.Name = "durationValue";
+            this.durationValue.Size = new System.Drawing.Size(0, 13);
+            this.durationValue.TabIndex = 22;
+            // 
             // Form1
             // 
             this.AcceptButton = this.startButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(429, 168);
+            this.ClientSize = new System.Drawing.Size(429, 171);
+            this.Controls.Add(this.durationValue);
+            this.Controls.Add(this.durationLabel);
+            this.Controls.Add(this.startTimeValue);
+            this.Controls.Add(this.startTimeLable);
             this.Controls.Add(this.toDateLabel);
             this.Controls.Add(this.fromDateLabel);
             this.Controls.Add(this.toDateTimePicker);
@@ -265,8 +308,8 @@
             this.Controls.Add(this.endButton);
             this.Controls.Add(this.startButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(445, 207);
-            this.MinimumSize = new System.Drawing.Size(445, 207);
+            this.MaximumSize = new System.Drawing.Size(445, 210);
+            this.MinimumSize = new System.Drawing.Size(445, 210);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TimeSheet";
@@ -296,6 +339,10 @@
         private System.Windows.Forms.DateTimePicker toDateTimePicker;
         private System.Windows.Forms.Label fromDateLabel;
         private System.Windows.Forms.Label toDateLabel;
+        private System.Windows.Forms.Label startTimeLable;
+        private System.Windows.Forms.Label startTimeValue;
+        private System.Windows.Forms.Label durationLabel;
+        private System.Windows.Forms.Label durationValue;
     }
 }
 

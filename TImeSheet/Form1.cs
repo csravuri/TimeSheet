@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -20,24 +21,15 @@ namespace TImeSheet
         }
 
         private List<TimeSheetDetailsTable> allTasksList = new List<TimeSheetDetailsTable>();
+        ExcelWriter excelWriter = new ExcelWriter();
+
         
-        private void setFormDefaultPosition()
-        {
-            int screenWidth = System.Windows.Forms.SystemInformation.PrimaryMonitorMaximizedWindowSize.Width;
-
-            int formWidth = this.Width;
-
-            this.StartPosition = FormStartPosition.Manual;
-            this.Left = screenWidth - formWidth;
-            this.Top = 0;
-
-        }
-
         #region Click Events
 
         private void Form1_Load(object sender, EventArgs e)
         {
             this.endButton.Enabled = false;
+            ClearTimeValues();
             RestorePreviousState();
 
             FillClientListDropDown();
@@ -48,6 +40,7 @@ namespace TImeSheet
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            ClearTimeValues();
             if (ValidateDetails())
             {
                 string taskID = this.taskIDTextBox.Text;
@@ -69,6 +62,7 @@ namespace TImeSheet
                 dbTransaction.AddNonExistingClient(clientName);
                 this.startButton.Enabled = false;
                 this.endButton.Enabled = true;
+                this.startTimeValue.Text = excelWriter.GetStandardTimeFormat(startTime);
                 this.WindowState = FormWindowState.Minimized;
             }
             else
@@ -93,6 +87,7 @@ namespace TImeSheet
 
             dbTransaction.TaskEnded(taskID, taskName, clientName, isCoded, isReviewd, isCheckin, endTime, comment);
 
+            this.durationValue.Text = excelWriter.GetStandardTimeFormat(excelWriter.GetTimeDifference(this.startTimeValue.Text, endTime));
             dbTransaction.AddNonExistingClient(clientName);
             this.endButton.Enabled = false;
             this.startButton.Enabled = true;
@@ -144,10 +139,10 @@ namespace TImeSheet
             {
                 this.exportButton.Enabled = false;
                 this.exportButton.Cursor = Cursors.WaitCursor;
-                ExcelWriter excelWriter = new ExcelWriter();
                 // pass date ranges to this, dont fetch and pass list
-                excelWriter.WriteExportDataToExcel(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
+                string savedFile = excelWriter.WriteExportDataToExcel(fromDate.ToString("yyyy-MM-dd HH:mm:ss"), toDate.ToString("yyyy-MM-dd HH:mm:ss"));
 
+                Process.Start(savedFile);
                 this.Close();
             }
             else
@@ -183,6 +178,24 @@ namespace TImeSheet
 
 
         #region Form updates
+
+        private void setFormDefaultPosition()
+        {
+            int screenWidth = System.Windows.Forms.SystemInformation.PrimaryMonitorMaximizedWindowSize.Width;
+
+            int formWidth = this.Width;
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Left = screenWidth - formWidth;
+            this.Top = 0;
+        }
+
+        private void ClearTimeValues()
+        {
+            this.startTimeValue.Text = "";
+            this.durationValue.Text = "";
+        }
+
         private void ClearForNewTask()
         {
             this.taskIDTextBox.Text = "";
@@ -238,6 +251,7 @@ namespace TImeSheet
                 this.reviewCheckBox.Checked = bool.Parse(previousTask.IsReviewed);
                 this.checkinCheckBox.Checked = bool.Parse(previousTask.IsCheckin);
                 this.commentTextBox.Text = previousTask.Comment;
+                this.startTimeValue.Text = excelWriter.GetStandardTimeFormat(previousTask.TaskStartTime);
 
                 this.endButton.Enabled = true;
                 this.startButton.Enabled = false;
@@ -245,10 +259,10 @@ namespace TImeSheet
                 this.ActiveControl = this.endButton;
 
                 DisableTextBoxes();
-
             }
-
         }
+
+        
 
         private bool ValidateDetails()
         {
