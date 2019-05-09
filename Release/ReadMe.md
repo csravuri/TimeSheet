@@ -29,3 +29,4 @@
 
 ## Coming soon
 1. Opens the exported file once clicked on export
+2. Current Task start time and endtime, duration on application
