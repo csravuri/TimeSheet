@@ -23,12 +23,10 @@ namespace TImeSheet
         private List<TimeSheetDetailsTable> allTasksList = new List<TimeSheetDetailsTable>();
         ExcelWriter excelWriter = new ExcelWriter();
 
-        
         #region Click Events
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.endButton.Enabled = false;
             ClearTimeValues();
             RestorePreviousState();
 
@@ -60,6 +58,7 @@ namespace TImeSheet
 
                 DisableTextBoxes();
                 dbTransaction.AddNonExistingClient(clientName);
+                ExportButton_Disable();
                 this.startButton.Enabled = false;
                 this.endButton.Enabled = true;
                 this.startTimeValue.Text = excelWriter.GetStandardTimeFormat(startTime);
@@ -91,6 +90,7 @@ namespace TImeSheet
             dbTransaction.AddNonExistingClient(clientName);
             this.endButton.Enabled = false;
             this.startButton.Enabled = true;
+            ExportButton_Enable();
             ClearForNewTask();
             EnableTextBoxes();
             this.ActiveControl = this.taskIDTextBox;
@@ -258,7 +258,13 @@ namespace TImeSheet
                 this.endButton.Focus();
                 this.ActiveControl = this.endButton;
 
+                ExportButton_Disable();
                 DisableTextBoxes();
+            }
+            else
+            {
+                this.endButton.Enabled = false;
+                ExportButton_Enable();
             }
         }
 
@@ -335,7 +341,23 @@ namespace TImeSheet
         {
             return fromDate <= toDate;
         }
+
+        private void ExportButton_Enable()
+        {
+            this.exportButton.Enabled = true;
+            this.exportButton.Cursor = Cursors.Hand;
+        }
+
+        private void ExportButton_Disable()
+        {
+            this.exportButton.Enabled = false;
+            this.exportButton.Cursor = Cursors.Cross;
+        }
+
+
         #endregion Form updates
+
+
 
     }
 }

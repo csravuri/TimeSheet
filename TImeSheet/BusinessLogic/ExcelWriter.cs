@@ -34,11 +34,11 @@ namespace TImeSheet.BusinessLogic
 
             Excel._Workbook excelWorkbook = xlApplication.ActiveWorkbook;
 
-            Excel._Worksheet emailWorkSheet = excelWorkbook.ActiveSheet;
-            excelWorkbook.Sheets.Add(emailWorkSheet);
+            Excel._Worksheet allDetailsSheet = excelWorkbook.ActiveSheet;
+            excelWorkbook.Sheets.Add(allDetailsSheet);
             Excel._Worksheet onlineWorkSheet = excelWorkbook.ActiveSheet;
             excelWorkbook.Sheets.Add(onlineWorkSheet);
-            Excel._Worksheet allDetailsSheet = excelWorkbook.ActiveSheet;
+            Excel._Worksheet emailWorkSheet = excelWorkbook.ActiveSheet;
 
             emailWorkSheet.Name = "Email";
             onlineWorkSheet.Name = "Sentrifugo";

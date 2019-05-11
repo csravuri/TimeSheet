@@ -29,3 +29,4 @@ G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csproj.GenerateRe
 G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csproj.CoreCompileInputs.cache
 G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.exe
 G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.pdb
+G:\Applications\cSharp\TimeSheet\TImeSheet\obj\Debug\TImeSheet.csprojAssemblyReference.cache
