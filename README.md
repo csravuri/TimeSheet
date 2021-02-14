@@ -19,3 +19,7 @@ Actual application will be avaliable in Release folder
 ### Note:
 This version is for Public testing, feel free to report bugs
 Use this if like it.
+
+# Screenshots
+
+<img src="./Screenshots/Screenshot 2021-02-14 203055.png" width=250>
